@@ -1,0 +1,38 @@
+#ISBN FUNCTION TO WORK OUT CHECK DIGIT
+#list of ISBN number
+ISBN12_List=["978164293841","978031614841","978149205630","978059313520","978125017860",
+             "978006269816","978110190422","978073521129","978198481812","978052555947",
+             "979861566187","979888574001","979821800431","979898503140","979840091234",
+             "979109063623","979876543210","979855551234","979835059999","979860001111"]
+#Function to calculate check digit of a singular 12-Digit ISBN number
+def CheckDigitCalc(Isbn12):
+    checkDigit=0
+    tripleValue=False#boolean because its every second digit
+    Weight=3
+    for i in range(len(Isbn12)):
+        var = int(Isbn12[i])
+        if tripleValue:#for every second digit
+            ISBNTriple=var
+            ISBNTriple*=Weight
+            checkDigit+=ISBNTriple
+            tripleValue=False#to go back to weight of 1/first digit
+        else:#for first digit 
+            tripleValue=True#for next loop which is 2nd digit and gain weight of 3
+            checkDigit+=var
+    checkDigit=checkDigit%10
+    checkDigit = 10-checkDigit
+    if checkDigit == 10:
+        return str(0)
+    else:
+        return str(checkDigit)#string so that it can be used in main function to concatenate
+
+#ISBN12_LIST Procedure to find check digit of all items in list and make a list of 13-Digit numbers
+def ISBN12_ListConversion(Isbn12,CheckDigitFunc):
+    Isbn13=[]#new list of 13-digit
+    for i in range(len(Isbn12)):
+        IsbnIncomplete=Isbn12[i]
+        Isbn13.append(IsbnIncomplete+"-"+CheckDigitFunc(Isbn12[i]))#puts 12 digit and check digit together
+    return Isbn13
+#Display
+print("This is the complete list of 13-digit ISBN numbers:")
+print(ISBN12_ListConversion(ISBN12_List,CheckDigitCalc))
